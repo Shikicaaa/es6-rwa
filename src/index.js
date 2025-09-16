@@ -30,23 +30,14 @@ function initApp() {
 
 
 const rxjsOutput = document.getElementById('rxjs-output');
-const cancelButton = document.getElementById('cancel-btn');
-const cancelClick$ = fromEvent(cancelButton, 'click');
 
 const inspirationalData$ = zip(
     from(api.getTip()).pipe(catchError(err => of({ text: 'Nema saveta danas.' }))),
     from(api.getQuote()).pipe(catchError(err => of({ text: 'Nema citata danas.' })))
 );
 
-const displayStream$ = merge(
-    inspirationalData$.pipe(
-        map(([tip, quote]) => `<strong>Savet:</strong> ${tip.text} <br> <strong>Citat:</strong> ${quote.text}`)
-    ),
-    cancelClick$.pipe(map(() => 'Ucitavanje otkazano od strane korisnika.'))
-);
-
-displayStream$.pipe(
-    takeUntil(cancelClick$)
+inspirationalData$.pipe(
+    map(([tip, quote]) => `<strong>Savet:</strong> ${tip.text} <br> <strong>Citat:</strong> ${quote.text}`)
 ).subscribe(html => {
     rxjsOutput.innerHTML = html;
 });
