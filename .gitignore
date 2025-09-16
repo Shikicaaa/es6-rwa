@@ -13,9 +13,6 @@ yarn-error.log*
 build/
 out/
 
-# Local database
-db.json
-
 # Logs
 logs/
 *.log

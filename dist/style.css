@@ -6,7 +6,7 @@
     --text-color: #212529;
     --border-radius: 8px;
 }
-body { 
+body {
     font-family: sans-serif; 
     background-color: var(--background-color); 
     color: var(--text-color); 
