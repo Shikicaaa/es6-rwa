@@ -1,51 +1,50 @@
+import { Observable } from 'rxjs';
+
 const typeSelector = document.getElementById('type-selector');
+const goalSelector = document.getElementById('goal-selector');
 const planContainer = document.getElementById('plan-container');
 
-export function renderTypeButtons(types, selectCallback) {
+
+export function renderTypeButtons(types) {
     const container = document.getElementById('type-buttons');
-    if (!container) {
-        console.error('Ne postoji container za tipove treninga (id="type-buttons")');
-        return;
-    }
-
     container.innerHTML = '<h2>1. Izaberi tip treninga:</h2>';
+    typeSelector.innerHTML = '';
 
-    types.forEach(type => {
-        const btn = document.createElement('button');
-        btn.className = 'btn';
-        btn.textContent = type.name;
+    return new Observable(subscriber => {
+        types.forEach(type => {
+            const btn = document.createElement('button');
+            btn.className = 'btn';
+            btn.textContent = type.name;
 
-        btn.onclick = () => {
-            document.querySelectorAll('#type-buttons .btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+            btn.onclick = () => {
+                document.querySelectorAll('#type-selector .btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
 
-            document.getElementById('plan-container').innerHTML = '';
-            const goalContainer = document.getElementById('type-selector');
-            goalContainer.innerHTML = '';
-            
-            if (type.id === "teretana") {
-                goalContainer.innerHTML = '<h2>2. Izaberi cilj:</h2>';
-                const goals = ["snaga", "hipertrofija"];
-                goals.forEach(goal => {
-                    const goalBtn = document.createElement('button');
-                    goalBtn.className = 'btn';
-                    goalBtn.textContent = goal.charAt(0).toUpperCase() + goal.slice(1);
-                    goalBtn.onclick = () => {
-                        document.querySelectorAll('#type-selector .btn').forEach(b => b.classList.remove('active'));
-                        goalBtn.classList.add('active');
-                        selectCallback(type.id, goal);
-                    };
-                    goalContainer.appendChild(goalBtn);
-                });
-            } else {
-                selectCallback(type.id, 'hipertrofija');
-            }
-        };
-        container.appendChild(btn);
+                planContainer.innerHTML = '';
+                goalSelector.innerHTML = '';
+
+                if (type.id === "teretana") {
+                    const goals = ["snaga", "hipertrofija"];
+                    goals.forEach(goal => {
+                        const goalBtn = document.createElement('button');
+                        goalBtn.className = 'btn';
+                        goalBtn.textContent = goal.charAt(0).toUpperCase() + goal.slice(1);
+                        goalBtn.onclick = () => {
+                            document.querySelectorAll('#goal-selector .btn').forEach(b => b.classList.remove('active'));
+                            goalBtn.classList.add('active');
+                            subscriber.next({ typeId: type.id, goal: goal });
+                        };
+                        goalSelector.appendChild(goalBtn);
+                    });
+                } else {
+                    subscriber.next({ typeId: type.id, goal: 'hipertrofija' });
+                }
+            };
+
+            typeSelector.appendChild(btn);
+        });
     });
 }
-
-
 
 export function renderPlan(plan, container) {
     container.innerHTML = '';
@@ -66,4 +65,3 @@ export function renderPlan(plan, container) {
         container.appendChild(dayCard);
     });
 }
-

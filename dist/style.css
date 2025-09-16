@@ -51,11 +51,22 @@ hr {
     background: #e9ecef;
     margin: 40px 0;
 }
-.selector-container {
+#type-selector {
     text-align: center;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
     margin-bottom: 20px;
 }
-
+#goal-selector {
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 20px;
+}
 .btn {
     margin: 5px; 
     padding: 12px 24px; 
@@ -69,6 +80,7 @@ hr {
     border-radius: var(--border-radius); 
     transition: all 0.3s ease;
     text-transform: capitalize;
+
 }
 
 .btn:hover {
